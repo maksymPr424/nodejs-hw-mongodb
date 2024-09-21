@@ -7,13 +7,10 @@ import {
   updateContact,
 } from '../services/contacts.js';
 
-export const getAllContactsController = async (req, res, next) => {
+export const getAllContactsController = async (req, res) => {
   const contacts = await getAllContacts();
 
-  if (!contacts) {
-    next(new Error('Contacts not found'));
-    return;
-  }
+  if (!contacts) throw createHttpError(404, 'Contacts not found');
 
   res.status(200).json({
     status: 200,
@@ -22,14 +19,11 @@ export const getAllContactsController = async (req, res, next) => {
   });
 };
 
-export const getContactByIdController = async (req, res, next) => {
+export const getContactByIdController = async (req, res) => {
   const { contactId } = req.params;
   const contact = await getContactById(contactId);
 
-  if (!contact) {
-    next(createHttpError(404, 'Contact not found'));
-    return;
-  }
+  if (!contact) throw createHttpError(404, 'Contact not found');
 
   res.status(200).json({
     status: 200,
@@ -48,15 +42,13 @@ export const createContactController = async (req, res) => {
   });
 };
 
-export const patchContactController = async (req, res, next) => {
+export const patchContactController = async (req, res) => {
   const { contactId } = req.params;
 
   const result = await updateContact(contactId, req.body);
 
-  if (!result) {
-    next(createHttpError(404, 'Contact not found!'));
-    return;
-  }
+  if (!result) throw createHttpError(404, 'Contact not found');
+  console.log(result);
 
   res.status(200).json({
     status: 200,
@@ -86,15 +78,12 @@ export const patchContactController = async (req, res, next) => {
 //   });
 // };
 
-export const delateContactController = async (req, res, next) => {
+export const delateContactController = async (req, res) => {
   const { contactId } = req.params;
 
   const contact = await delateContact(contactId);
 
-  if (!contact) {
-    next(createHttpError(404, 'Contact not found'));
-    return;
-  }
+  if (!contact) throw createHttpError(404, 'Contact not found');
 
   res.status(204).send();
 };
