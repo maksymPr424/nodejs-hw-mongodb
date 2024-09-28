@@ -6,9 +6,22 @@ import {
   getContactById,
   updateContact,
 } from '../services/contacts.js';
+import { parsePaginationParams } from '../utils/parsePaginationParams.js';
+import { parseSortParams } from '../utils/parseSortParams.js';
+import { parseFilterParams } from '../utils/parseFilterParams.js';
 
 export const getAllContactsController = async (req, res) => {
-  const contacts = await getAllContacts();
+  const { page, perPage } = parsePaginationParams(req.query);
+  const { sortBy, sortOrder } = parseSortParams(req.query);
+  const filter = parseFilterParams(req.query);
+
+  const contacts = await getAllContacts({
+    page,
+    perPage,
+    sortBy,
+    sortOrder,
+    filter,
+  });
 
   if (!contacts) throw createHttpError(404, 'Contacts not found');
 
@@ -56,26 +69,26 @@ export const patchContactController = async (req, res) => {
   });
 };
 
-// export const upsertContactController = async (req, res, next) => {
-//   const { contactId } = req.params;
+export const upsertContactController = async (req, res, next) => {
+  const { contactId } = req.params;
 
-//   const result = await updateContact(contactId, req.body, {
-//     upsert: true,
-//   });
+  const result = await updateContact(contactId, req.body, {
+    upsert: true,
+  });
 
-//   if (!result) {
-//     next(createHttpError(404, 'Contact not found'));
-//     return;
-//   }
+  if (!result) {
+    next(createHttpError(404, 'Contact not found'));
+    return;
+  }
 
-//   const status = result.isNew ? 201 : 200;
+  const status = result.isNew ? 201 : 200;
 
-//   res.status(status).json({
-//     status,
-//     message: 'Successfully upserted a contact!',
-//     data: result.contact,
-//   });
-// };
+  res.status(status).json({
+    status,
+    message: 'Successfully upserted a contact!',
+    data: result.contact,
+  });
+};
 
 export const delateContactController = async (req, res) => {
   const { contactId } = req.params;
@@ -84,5 +97,5 @@ export const delateContactController = async (req, res) => {
 
   if (!contact) throw createHttpError(404, 'Contact not found');
 
-  res.status(204).send();
+  res.sendStatus(204);
 };
