@@ -6,11 +6,13 @@ import {
   getContactByIdController,
   patchContactController,
   upsertContactController,
-  // upsertContactController,
 } from '../controllers/contacts.js';
 import { ctrlWrapper } from '../utils/ctrlWrapper.js';
 import { validateBody } from '../middlewares/validateBody.js';
-import { createContactsSchema } from '../validation/contacts.js';
+import {
+  createContactsSchema,
+  patchContactsSchema,
+} from '../validation/contacts.js';
 import { isValidId } from '../validation/isValidId.js';
 
 const router = Router();
@@ -32,7 +34,7 @@ router.post(
 router.patch(
   '/contacts/:contactId',
   isValidId,
-  validateBody(createContactsSchema),
+  validateBody(patchContactsSchema),
   ctrlWrapper(patchContactController),
 );
 
