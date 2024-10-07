@@ -21,6 +21,7 @@ export const getAllContactsController = async (req, res) => {
     sortBy,
     sortOrder,
     filter,
+    userId: req.userId,
   });
 
   if (!contacts) throw createHttpError(404, 'Contacts not found');
@@ -34,7 +35,8 @@ export const getAllContactsController = async (req, res) => {
 
 export const getContactByIdController = async (req, res) => {
   const { contactId } = req.params;
-  const contact = await getContactById(contactId);
+  const { userId } = req;
+  const contact = await getContactById(userId, contactId);
 
   if (!contact) throw createHttpError(404, 'Contact not found');
 
@@ -46,7 +48,9 @@ export const getContactByIdController = async (req, res) => {
 };
 
 export const createContactController = async (req, res) => {
-  const contact = await createContact(req.body);
+  const userId = req.userId;
+  const contact = await createContact({ ...req.body, userId });
+  console.log(req.userId);
 
   res.status(201).json({
     status: 201,
@@ -57,8 +61,9 @@ export const createContactController = async (req, res) => {
 
 export const patchContactController = async (req, res) => {
   const { contactId } = req.params;
+  const userId = req.userId;
 
-  const result = await updateContact(contactId, req.body);
+  const result = await updateContact(contactId, req.body, {}, userId);
 
   if (!result) throw createHttpError(404, 'Contact not found');
 
@@ -71,10 +76,16 @@ export const patchContactController = async (req, res) => {
 
 export const upsertContactController = async (req, res, next) => {
   const { contactId } = req.params;
+  const userId = req.userId;
 
-  const result = await updateContact(contactId, req.body, {
-    upsert: true,
-  });
+  const result = await updateContact(
+    contactId,
+    req.body,
+    {
+      upsert: true,
+    },
+    userId,
+  );
 
   if (!result) {
     next(createHttpError(404, 'Contact not found'));
@@ -92,8 +103,9 @@ export const upsertContactController = async (req, res, next) => {
 
 export const delateContactController = async (req, res) => {
   const { contactId } = req.params;
+  const userId = req.userId;
 
-  const contact = await delateContact(contactId);
+  const contact = await delateContact(contactId, userId);
 
   if (!contact) throw createHttpError(404, 'Contact not found');
 
