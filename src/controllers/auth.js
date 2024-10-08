@@ -66,7 +66,7 @@ const setupSession = (res, session) => {
 };
 
 export const refreshUserController = async (req, res) => {
-  const session = isEqualSession({
+  const session = await isEqualSession({
     sessionId: req.cookies.sessionId,
     refreshToken: req.cookies.refreshToken,
   });
@@ -85,10 +85,7 @@ export const refreshUserController = async (req, res) => {
     refreshToken: req.cookies.refreshToken,
   });
 
-  const refreshedSession = await refreshUsersSession({
-    sessionId: req.cookies.sessionId,
-    refreshToken: req.cookies.refreshToken,
-  });
+  const refreshedSession = await refreshUsersSession(session.userId);
 
   setupSession(res, refreshedSession);
 

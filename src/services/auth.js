@@ -48,11 +48,11 @@ export const isEqualSession = ({ sessionId, refreshToken }) =>
 export const delateSession = ({ sessionId, refreshToken }) =>
   SessionsCollection.deleteOne({ _id: sessionId, refreshToken });
 
-export const refreshUsersSession = async (session) => {
+export const refreshUsersSession = async (userId) => {
   const newSession = createSession();
 
   return await SessionsCollection.create({
-    userId: session.userId,
+    userId,
     ...newSession,
   });
 };
