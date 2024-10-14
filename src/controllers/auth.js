@@ -7,6 +7,10 @@ import {
   refreshUsersSession,
   isEqualSession,
   delateSession,
+  requestResetToken,
+  verifyToken,
+  findOneByIdAndEmail,
+  resetPassword,
 } from '../services/auth.js';
 import createHttpError from 'http-errors';
 
@@ -106,4 +110,59 @@ export const logoutUserController = async (req, res) => {
   res.clearCookie('refreshToken');
 
   res.sendStatus(204);
+};
+
+export const requestResetTokenController = async (req, res) => {
+  const { email } = req.body;
+
+  const user = await isUnicalEmale(email);
+
+  if (!user) throw createHttpError(404, 'User not found!');
+
+  try {
+    await requestResetToken(user);
+  } catch (err) {
+    console.log(err);
+
+    throw createHttpError(
+      500,
+      'Failed to send the email, please try again later.',
+    );
+  }
+
+  res.status(200).json({
+    status: 200,
+    message: 'Reset password email has been successfully sent.',
+    data: [],
+  });
+};
+
+export const resetPasswordController = async (req, res) => {
+  const { token, password } = req.body;
+
+  let entries;
+
+  try {
+    entries = await verifyToken(token);
+  } catch (err) {
+    if (err instanceof Error) throw createHttpError(401, err.message);
+    throw err;
+  }
+
+  const user = await findOneByIdAndEmail({
+    _id: entries.sub,
+    email: entries.email,
+  });
+
+  if (!user) {
+    throw createHttpError(404, 'User not found!');
+  }
+
+  await resetPassword({ _id: user._id, password });
+
+  res.json({
+    message: 'Password was successfully reset!',
+    status: 200,
+    data: {},
+  });
 };
