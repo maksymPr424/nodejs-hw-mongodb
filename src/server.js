@@ -1,5 +1,5 @@
 // src/server.js
-
+import { UPLOAD_DIR } from './constants/constants.js';
 import express from 'express';
 import pino from 'pino-http';
 import cors from 'cors';
@@ -18,6 +18,7 @@ export const setupServer = () => {
   app.use(express.json());
   app.use(cors());
   app.use(cookieParser());
+  app.use('/uploads', express.static(UPLOAD_DIR));
 
   app.use(
     pino({

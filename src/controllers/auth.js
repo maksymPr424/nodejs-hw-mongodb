@@ -1,4 +1,4 @@
-import { ONE_MONTH } from '../constants/constans.js';
+import { ONE_MONTH } from '../constants/constants.js';
 import {
   isUnicalEmale,
   loginUser,

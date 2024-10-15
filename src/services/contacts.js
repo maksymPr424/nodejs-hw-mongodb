@@ -1,4 +1,4 @@
-import { SORT_ORDER } from '../constants/constans.js';
+import { SORT_ORDER } from '../constants/constants.js';
 import { ContactsCollection } from '../db/models/contact.js';
 import { calculatePaginationData } from '../utils/calculatePaginationData.js';
 
@@ -56,7 +56,7 @@ export const updateContact = async (
 ) => {
   const rawResult = await ContactsCollection.findOneAndUpdate(
     { _id: contactId, userId },
-    payload,
+    { ...payload },
     {
       new: true,
       includeResultMetadata: true,

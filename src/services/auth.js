@@ -8,7 +8,7 @@ import {
   ONE_MONTH,
   SMTP,
   TEMPLATES_DIR,
-} from '../constants/constans.js';
+} from '../constants/constants.js';
 import jwt from 'jsonwebtoken';
 import { env } from '../utils/env.js';
 import { sendMail } from '../utils/sendMail.js';
@@ -16,6 +16,8 @@ import { sendMail } from '../utils/sendMail.js';
 import handlebars from 'handlebars';
 import path from 'node:path';
 import fs from 'node:fs/promises';
+
+import uuid from 'uuid';
 
 const resetPasswordTemplatePath = path.join(
   TEMPLATES_DIR,
@@ -84,6 +86,7 @@ export const requestResetToken = async (user) => {
     env(JWT.JWT_SECRET),
     {
       expiresIn: '15m',
+      jwtid: uuid.v4(),
     },
   );
 
