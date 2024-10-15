@@ -17,7 +17,7 @@ import handlebars from 'handlebars';
 import path from 'node:path';
 import fs from 'node:fs/promises';
 
-import uuid from 'uuid';
+// import uuid from 'uuid';
 
 const resetPasswordTemplatePath = path.join(
   TEMPLATES_DIR,
@@ -86,7 +86,7 @@ export const requestResetToken = async (user) => {
     env(JWT.JWT_SECRET),
     {
       expiresIn: '15m',
-      jwtid: uuid.v4(),
+      // jwtid: uuid.v4(),
     },
   );
 
