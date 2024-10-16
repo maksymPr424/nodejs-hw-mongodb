@@ -33,7 +33,7 @@ router.get(
 
 router.post(
   '/',
-  upload.single('avatar'),
+  upload.single('photo'),
   validateBody(createContactsSchema),
   ctrlWrapper(createContactController),
 );
@@ -42,7 +42,7 @@ router.patch(
   '/:contactId',
   isValidId,
   authorization,
-  upload.single('avatar'),
+  upload.single('photo'),
   validateBody(patchContactsSchema),
   ctrlWrapper(patchContactController),
 );
@@ -51,7 +51,7 @@ router.put(
   '/:contactId',
   isValidId,
   authorization,
-  upload.single('avatar'),
+  upload.single('photo'),
   validateBody(createContactsSchema),
   ctrlWrapper(upsertContactController),
 );
