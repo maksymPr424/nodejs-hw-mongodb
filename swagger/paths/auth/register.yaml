@@ -1,0 +1,52 @@
+#/swagger/paths/students/post.yaml
+
+tags:
+  - Auth
+summary: Register user
+operationId: registerUser
+description: 'Register user with name, email and password'
+security:
+  - bearerAuth: []
+requestBody:
+  content:
+    multipart/form-data:
+      schema:
+        type: object
+        required:
+          - name
+          - email
+          - password
+        properties:
+          name:
+            description: "User's name"
+            type: string
+            example: 'John Smith'
+          password:
+            description: "User's password"
+            type: string
+            example: '123123123'
+          email:
+            description: "Contact's email"
+            type: string
+            example: 'user@gmail.com'
+responses:
+  '201':
+    description: Creates a new user
+    content:
+      application/json:
+        schema:
+          type: object
+          required:
+            - status
+            - message
+            - data
+          properties:
+            status:
+              type: integer
+              example: 201
+            message:
+              type: string
+              example: Successfully created a new user!
+            data:
+              type: object
+              $ref: '../../components/schemas/auth.yaml'
