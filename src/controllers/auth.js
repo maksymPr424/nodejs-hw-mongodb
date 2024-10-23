@@ -183,8 +183,8 @@ export const getGoogleOAuthUrlController = async (req, res) => {
 
 export const loginWithGoogleController = async (req, res) => {
   const data = await getPayloadFromCode(req.body.code);
-  if (!data) throw createHttpError(401);
-  
+  if (!data) throw createHttpError(401, 'Something went wrong');
+
   const session = await loginOrSignupWithGoogle(data);
   setupSession(res, session);
 

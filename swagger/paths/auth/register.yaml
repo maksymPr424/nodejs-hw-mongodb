@@ -50,3 +50,5 @@ responses:
             data:
               type: object
               $ref: '../../components/schemas/auth.yaml'
+  '409':
+    $ref: '../../components/responses/409.yaml'

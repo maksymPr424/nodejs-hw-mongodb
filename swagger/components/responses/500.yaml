@@ -1,0 +1,26 @@
+# swagger/components/responses/401.yaml
+
+description: Failed to send email
+content:
+  application/json:
+    schema:
+      type: object
+      required:
+        - status
+        - message
+        - data
+      properties:
+        status:
+          type: integer
+          example: 500
+        message:
+          type: string
+          example: Failed
+        data:
+          type: object
+          required:
+            - message
+          properties:
+            message:
+              type: string
+              example: 'Failed to send the email, please try again later.'
