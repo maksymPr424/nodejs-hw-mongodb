@@ -11,8 +11,11 @@ import {
   verifyToken,
   findOneByIdAndEmail,
   resetPassword,
+  loginOrSignupWithGoogle,
+  getPayloadFromCode,
 } from '../services/auth.js';
 import createHttpError from 'http-errors';
+import { generateAuthUrl } from '../utils/googleOAuthClient.js';
 
 export const registerUserController = async (req, res) => {
   const { email } = req.body;
@@ -164,5 +167,32 @@ export const resetPasswordController = async (req, res) => {
     message: 'Password was successfully reset!',
     status: 200,
     data: {},
+  });
+};
+
+export const getGoogleOAuthUrlController = async (req, res) => {
+  const url = generateAuthUrl();
+  res.json({
+    status: 200,
+    message: 'Successfully get Google OAuth url!',
+    data: {
+      url,
+    },
+  });
+};
+
+export const loginWithGoogleController = async (req, res) => {
+  const data = await getPayloadFromCode(req.body.code);
+  if (!data) throw createHttpError(401);
+  
+  const session = await loginOrSignupWithGoogle(data);
+  setupSession(res, session);
+
+  res.json({
+    status: 200,
+    message: 'Successfully logged in via Google OAuth!',
+    data: {
+      accessToken: session.accessToken,
+    },
   });
 };

@@ -1,0 +1,42 @@
+#/swagger/paths/students/post.yaml
+
+tags:
+  - Auth
+summary: Login or Register with OAuth
+operationId: logOrRegWithOAuth
+description: 'Create or login a new user with OAuth'
+security:
+  - bearerAuth: []
+requestBody:
+  content:
+    multipart/form-data:
+      schema:
+        type: object
+        required:
+          - code
+        properties:
+          code:
+            description: "User's code from google"
+            type: string
+            example: '4/0AVG7fiRk0nI0Eh9htwaNCfW9xkOaXc4n_ylvuLDtC2_hBFQNpqOf6G2y56Sh_VnKa4-ZsA'
+responses:
+  '200':
+    description: Logged user
+    content:
+      application/json:
+        schema:
+          type: object
+          required:
+            - status
+            - message
+            - data
+          properties:
+            status:
+              type: integer
+              example: 200
+            message:
+              type: string
+              example: Successfully logged in via Google OAuth!
+            data:
+              type: object
+              $ref: '../../components/schemas/auth.yaml'
