@@ -7,11 +7,6 @@ operationId: getOAuthUrl
 description: 'Get url for google authentication'
 security:
   - bearerAuth: []
-requestBody:
-  content:
-    multipart/form-data:
-      schema:
-        type: object
 responses:
   '200':
     description: Logged user

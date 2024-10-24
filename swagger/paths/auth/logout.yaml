@@ -7,11 +7,6 @@ operationId: logoutUser
 description: 'Logout user and delate session'
 security:
   - bearerAuth: []
-requestBody:
-  content:
-    multipart/form-data:
-      schema:
-        type: object
 responses:
   '204':
     description: Logout a user

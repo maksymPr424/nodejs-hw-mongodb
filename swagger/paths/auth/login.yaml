@@ -9,21 +9,22 @@ security:
   - bearerAuth: []
 requestBody:
   content:
-    multipart/form-data:
+    application/json:
       schema:
         type: object
         required:
           - email
           - password
         properties:
-          password:
-            description: "User's password"
-            type: string
-            example: '123123123'
           email:
             description: "Contact's email"
             type: string
             example: 'user@gmail.com'
+          password:
+            description: "User's password"
+            type: string
+            example: '123123123'
+
 responses:
   '200':
     description: Logged user
